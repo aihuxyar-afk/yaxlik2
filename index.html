@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ug" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ياشلىق — ئەھمىيەتلىك ئۆمۈر</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            darkBg: '#0b0f19',
+                            lightBg: '#f8fafc',
+                            cardDark: 'rgba(17, 24, 39, 0.85)',
+                            cardLight: '#ffffff',
+                            borderDark: 'rgba(55, 65, 81, 0.7)',
+                            borderLight: '#e2e8f0',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            cyan: '#06b6d4',
+                            purple: '#8b5cf6'
+                        }
+                    },
+                    fontFamily: {
+                        uyghur: ['"ALKATIP TorTom"', '"UKIJ Tor Tom"', 'UKIJ, "Microsoft Uighur"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ALKATIP TorTom Custom Uyghur Font Base64 Integration */
+        @font-face {
+            font-family: 'ALKATIP TorTom';
+            src: local('ALKATIP TorTom'), local('ALKATIP Tor Tom'),
+                 url('data:font/ttf;base64,AAEAAAASAQACAAAAREdERQAqAAAAAAAAAPAAAAAZR1BPU2KgAH8AAAD4AAAA4EdTVULoqAAAAAABeAAAAKhPUy82V0pURAAAAjgAAABgY21hcJLUNA8AAALAAAAAhGdhc3D//wAAAAAEAAT//wAAYWdseWYybj1nAAAECAAAyGBoZWFk9WdSKwAAA8gAAAA2aGhlYTBwMkkAAAP8AAAAJGhtdHgvZz7zAAAEIAAAAFpsb2Nhdnd/8AAAAEAAAABptYXhwAo4AgwAABGAAAAAgbmFtZUpIteAAAARgAAABcHBvc3RUGKlUAAAGCAAAAFBPU1QvVl9A/QAABlwAAAB0AAAAAQAAAAAAAQAAAADU56oNXw889QALBAAAAAAA0t+b7AAAAADScpvs///+LQQAA8gAAAAJAAIAAAAAAAAAAQAAA8j/bAAABAAAAAAAAP38AAEAAAAAAAAAAAAAAAAAAAAWAAEAAAAWACQAAgAAAAAAAgAAAAEAAABnAAYAAAAAAAAAAAABAAD/AQAB/wAFAAIAAAAAAAAADgBNAGQAZgBnAGkAawBsAG0AbgBvAHAAcQB3AHgAeQB6AHsAfAB9AH4AfwCBACIAIwAkACUAJgAnACgAKQAqACsALAAtAC4ALwAwADEAMgAzADQAOQA6ADsAPAA9AD4APwBAAEIAQwA4AEQARQBLAEwAXwBmAGgAbwBxAHYAeQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD9/AABAAAAAAAAAAAAAAAAAAAAAAA=') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'ALKATIP TorTom', 'UKIJ Tor Tom', 'UKIJ', 'Microsoft Uighur', sans-serif !important;
+            line-height: 1.8;
+            letter-spacing: normal;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Fixing Uyghur font line height and font spacing issues */
+        h1, h2, h3, h4, h5, h6, p, span, a, button, input {
+            font-family: 'ALKATIP TorTom', 'UKIJ Tor Tom', 'UKIJ', 'Microsoft Uighur', sans-serif !important;
+            line-height: 1.7 !important;
+            word-break: break-word;
+        }
+
+        h1 { margin-bottom: 0.75rem; }
+        h2 { margin-bottom: 0.75rem; }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphic elements */
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.25s ease;
+        }
+
+        .dark .glass-panel {
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(55, 65, 81, 0.6);
+            color: #f3f4f6;
+        }
+
+        .light .glass-panel {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            color: #0f172a;
+        }
+
+        .dark .text-adaptive-main { color: #f9fafb; }
+        .light .text-adaptive-main { color: #0f172a; }
+
+        .dark .text-adaptive-sub { color: #9ca3af; }
+        .light .text-adaptive-sub { color: #4b5563; }
+
+        .dark .bg-adaptive-input { background: rgba(31, 41, 55, 0.9); color: #ffffff; border-color: #4b5563; }
+        .light .bg-adaptive-input { background: #ffffff; color: #0f172a; border-color: #cbd5e1; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        .dark ::-webkit-scrollbar-track { background: #0b0f19; }
+        .light ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-cyber-darkBg text-slate-100 dark:bg-cyber-darkBg dark:text-slate-100 selection:bg-emerald-500 selection:text-white font-uyghur">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-40 glass-panel border-b px-4 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white text-xl font-bold shadow-md">
+                    <i class="fa-solid fa-kaaba"></i>
+                </div>
+                <span class="text-xl md:text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
+                    ياشلىق — ئەھمىيەتلىك ئۆمۈر
+                </span>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-6 text-sm font-bold text-adaptive-main">
+                <a href="#hero" class="hover:text-emerald-500 transition-colors">باش بەت</a>
+                <a href="#reminders" class="hover:text-emerald-500 transition-colors">قۇرئان ۋە ھەدىس</a>
+                <a href="#figures" class="hover:text-emerald-500 transition-colors">30 مەشھۇر شەخس</a>
+                <a href="#principles" class="hover:text-emerald-500 transition-colors">ئاساسىي ئۆلچەملەر</a>
+                <a href="#time-calc" class="hover:text-emerald-500 transition-colors">ۋاقىت ھېسابلىغۇچ</a>
+                <a href="#tracker" class="hover:text-emerald-500 transition-colors">ئادەت بەلگىلىگۈچى</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle" onclick="toggleTheme()" class="px-3 py-2 rounded-xl glass-panel text-amber-500 hover:text-amber-400 border transition-all flex items-center gap-2 text-xs font-bold shadow-sm">
+                    <i id="theme-icon" class="fa-solid fa-sun text-base"></i>
+                    <span id="theme-text" class="hidden sm:inline">كۈندۈزلىك</span>
+                </button>
+
+                <a href="#figures" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all">
+                    30 شەخس تەرجىمىھالى
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center relative pt-28 pb-16 px-4">
+        <div class="max-w-5xl mx-auto text-center z-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel text-emerald-500 dark:text-emerald-400 text-xs font-bold mb-6 border border-emerald-500/30">
+                <i class="fa-solid fa-star"></i>
+                <span>ياشلىق — قايتا كەلمەيدىغان ئالتۇن پۇرسەت</span>
+            </div>
+            
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-adaptive-main leading-snug mb-6">
+                ياشلىق ئالتۇن دەۋرىڭىزنى <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500">
+                    ئىسلام ۋە كەلگۈسى ئۈچۈن
+                </span> 
+                ئەھمىيەتلىك ئۆتكۈزۈڭ!
+            </h1>
+
+            <p class="text-base md:text-lg text-adaptive-sub max-w-3xl mx-auto leading-relaxed mb-8">
+                پەيغەمبەر ئەلەيھىسسالام ئېيتقان: <span class="text-amber-500 dark:text-amber-400 font-bold">«ئىككى زور نېئمەت باركى، نۇرغۇن كىشىلەر ئۇنىڭ قەدرىگە يەتمەي ئالدىنىپ قالىدۇ: بىرى تەن ساقلىق، يەنە بىرى بىكار ۋاقىت.»</span> (سەھىھ بۇخارى: 6412). ياشلىق دەۋرىڭىزنى ئىمان، ئىلمىي ئىزدىنىش ۋە خەيرلىك ئادەتلەر بىلەن زىننەتلەڭ!
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <a href="#reminders" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                    <i class="fa-solid fa-book-quran"></i>
+                    <span>قۇرئان ۋە ھەدىس ئەسلەتمىلىرى</span>
+                </a>
+                <a href="#figures" class="px-6 py-3 rounded-xl glass-panel text-emerald-500 dark:text-emerald-400 border border-emerald-500/40 text-sm font-bold hover:bg-emerald-500/10 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>30 مەشھۇر ياش شەخس</span>
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="glass-panel p-4 rounded-2xl">
+                    <div class="text-2xl font-black text-emerald-500 dark:text-emerald-400">5 غەنىيمەت</div>
+                    <div class="text-xs text-adaptive-sub">ھەدىستىكى ئالتۇن ئۆلچەم</div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl">
+                    <div class="text-2xl font-black text-cyan-500 dark:text-cyan-400">30 شەخس</div>
+                    <div class="text-xs text-adaptive-sub">ياش ساھابە ۋە قەھرىمانلار</div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl">
+                    <div class="text-2xl font-black text-amber-500 dark:text-amber-400">7 كىشى</div>
+                    <div class="text-xs text-adaptive-sub">ئەرش سايىسىدىكى ياشلار</div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl">
+                    <div class="text-2xl font-black text-purple-500 dark:text-purple-400">100%</div>
+                    <div class="text-xs text-adaptive-sub">ئەمەلىي ئادەت پىلانى</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quran & Hadith Section -->
+    <section id="reminders" class="py-16 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-10">
+            <div class="inline-block px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 text-xs font-bold mb-2 border border-emerald-500/20">
+                <i class="fa-solid fa-kaaba"></i> ئىلاھىي يولباشچى
+            </div>
+            <h2 class="text-2xl md:text-4xl font-black text-adaptive-main">
+                قۇرئان كەرىم ۋە سەھىھ ھەدىس ئەسلەتمىلىرى
+            </h2>
+            <p class="text-adaptive-sub max-w-2xl mx-auto text-xs md:text-sm mt-2">
+                ئاللاھ تائالا ۋە پەيغەمبەر ئەلەيھىسسالامنىڭ ياشلىق، ۋاقىت ۋە ئۆمۈر ھەققىدىكى ئالتۇن تەلىماتلىرى.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="reminder-cards-container">
+            <!-- Dynamic Content -->
+        </div>
+
+        <!-- Random Quote Generator Box -->
+        <div class="mt-8 glass-panel p-6 rounded-2xl border border-emerald-500/30 text-center relative">
+            <h3 class="text-base font-bold text-amber-500 dark:text-amber-400 mb-2" id="random-title">كۈندىلىك ئىلمىي ئەسلەتمە</h3>
+            <p class="text-sm md:text-base font-bold leading-relaxed text-adaptive-main max-w-3xl mx-auto my-3" id="random-content">
+                «ئىككى زور نېئمەت باركى، نۇرغۇن كىشىلەر ئۇنىڭ قەدرىگە يەتمەي ئالدىنىپ قالىدۇ: بىرى تەن ساقلىق، يەنە بىرى بىكار ۋاقىت.»
+            </p>
+            <div class="text-xs text-emerald-500 dark:text-emerald-400 font-semibold mb-4" id="random-source">— سەھىھ بۇخارى، 6412</div>
+            <button onclick="generateRandomReminder()" class="px-5 py-2 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all">
+                <i class="fa-solid fa-shuffle ml-2"></i> باشقا ئەسلەتمىنى كۆرۈش
+            </button>
+        </div>
+    </section>
+
+    <!-- 30 Prominent Young Figures -->
+    <section id="figures" class="py-16 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-8">
+            <div class="inline-block px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 dark:text-amber-400 text-xs font-bold mb-2 border border-amber-500/20">
+                <i class="fa-solid fa-crown"></i> تارىخىي ئۈلگىلەر
+            </div>
+            <h2 class="text-2xl md:text-4xl font-black text-adaptive-main">
+                ئىسلام تارىخىدىكى 30 مەشھۇر ياش شەخس
+            </h2>
+            <p class="text-adaptive-sub max-w-2xl mx-auto text-xs md:text-sm mt-2">
+                ياشلىق دەۋرىدىلا بۈيۈك ئىشلارنى ئىشقا ئاشۇرغان ساھابىلەر، سەرپەرمەندلەر ۋە ئالىملار (كارتىنى باسسىڭىز تەپسىلىي تەرجىمىھالى ئېچىلىدۇ).
+            </p>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+            <div class="flex flex-wrap gap-2 justify-center" id="category-filters">
+                <button onclick="filterFigures('all')" class="filter-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 text-white transition-all">ھەممىسى (30)</button>
+                <button onclick="filterFigures('sahaba')" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold glass-panel border transition-all">ياش ساھابىلەر</button>
+                <button onclick="filterFigures('leader')" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold glass-panel border transition-all">سەرپەرمەندلەر</button>
+                <button onclick="filterFigures('scholar')" class="filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold glass-panel border transition-all">بۈيۈك ئالىملار</button>
+            </div>
+
+            <div class="relative w-full md:w-64">
+                <input type="text" id="search-figures" oninput="searchFigures()" placeholder="شەخس ئىسمى بىلەن ئىزدەش..." class="w-full pl-3 pr-9 py-2 rounded-xl bg-adaptive-input text-xs focus:outline-none focus:border-emerald-500 transition-all">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+            </div>
+        </div>
+
+        <!-- Grid Container -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="figures-grid">
+            <!-- Dynamic 30 Cards -->
+        </div>
+    </section>
+
+    <!-- Core Principles Section -->
+    <section id="principles" class="py-16 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl md:text-4xl font-black text-adaptive-main">
+                ياشلىقنى مەنىلىك قىلىشنىڭ 5 تۈپ ئاساسى
+            </h2>
+            <p class="text-adaptive-sub max-w-2xl mx-auto text-xs md:text-sm mt-2">
+                بۇ بەش ئاساسنى ھاياتىڭىزغا تەتبىقلىسىڭىز، ياشلىق دەۋرىڭىز ئىككى دۇنيالىق بەختكە ئېرىشتۈرىدۇ.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-kaaba"></i>
+                </div>
+                <h3 class="text-lg font-bold text-adaptive-main mb-2">1. ئىمان ۋە ئىبادەت ئاساسى</h3>
+                <p class="text-adaptive-sub text-xs leading-relaxed">
+                    نەمەزلارنى ۋاقتىدا ئۆتەش، قۇرئان ئوقۇش ۋە ئاللاھقا بولغان ئىماننى كۈچەيتىش. ئەرش سايىسىدىكى 7 كىشىنىڭ بىرى ئاللاھقا ئىبادەت بىلەن ئۆسكەن ياشتۇر.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-500 dark:text-cyan-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h3 class="text-lg font-bold text-adaptive-main mb-2">2. پايدىلىق ئىلىم-بىلىم</h3>
+                <p class="text-adaptive-sub text-xs leading-relaxed">
+                    دىنىي ۋە زامانىۋى بىلىملەرنى (سۈنئىي ئىدراك، تىل، تېخنىكا) ئۆگىنىش. ياشلىقتىكى ئۆگىنىش تاشقا ئويۇلغان نەقشتۇر.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <h3 class="text-lg font-bold text-adaptive-main mb-2">3. ۋاقىتنى تېجەش</h3>
+                <p class="text-adaptive-sub text-xs leading-relaxed">
+                    ئىجتىمائىي تورلاردا مەقسەتسىز ۋاقىت ئىسراپ قىلماسلىق. كۈنلۈك پىلان بىلەن ياشاش. ۋاقىت—ھاياتنىڭ ئۆزىدۇر.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-500 dark:text-purple-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <h3 class="text-lg font-bold text-adaptive-main mb-2">4. تەن ساغلاملىقى ۋە ئاخلاق</h3>
+                <p class="text-adaptive-sub text-xs leading-relaxed">
+                    كۈچلۈك مۆمىن ئاجىز مۆمىندىن كۆرە ئاللاھقا سۆيۈملۈكتۇر. بېدىنىنى چېنىقتۇرۇش ھەم گۈزەل ئاخلاقنى جارى قىلىش.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl md:col-span-2 lg:col-span-2">
+                <div class="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-500 dark:text-teal-400 flex items-center justify-center text-xl mb-4">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                </div>
+                <h3 class="text-lg font-bold text-adaptive-main mb-2">5. جەمئىيەت ۋە ئۈممەتكە نەپ يەتكۈزۈش</h3>
+                <p class="text-adaptive-sub text-xs leading-relaxed">
+                    ئەڭ ياخشى ئادەم—باشقىلارغا ئەڭ ئۆنۈملۈك نەپ يەتكۈزگەن كىشىدۇر. كۆڭۈللۈك خىزمەتلەرگە قاتنىشىش ۋە ئىسلام ئۈممىتىگە خىزمەت قىلىش.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Time Calculator Section -->
+    <section id="time-calc" class="py-16 px-4 max-w-4xl mx-auto">
+        <div class="glass-panel p-6 md:p-10 rounded-3xl border border-emerald-500/30">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl md:text-3xl font-black text-emerald-500 dark:text-emerald-400 mb-1">ياشلىق ۋاقتى ھېسابلىغۇچ</h2>
+                <p class="text-adaptive-sub text-xs">ھازىرقى يېشىڭىزنى كىرگۈزۈپ، ياشلىق ئالتۇن دەۋرىڭىزنىڭ نىسبىتىنى كۆرۈڭ!</p>
+            </div>
+
+            <div class="max-w-xs mx-auto space-y-4">
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-adaptive-main text-center">ھازىرقى يېشىڭىز (15 - 35 ياش):</label>
+                    <input type="number" id="user-age" min="15" max="35" value="20" class="w-full px-4 py-2.5 rounded-xl bg-adaptive-input text-base font-bold text-center focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <button onclick="calculateYouth()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all">
+                    ھېسابلاش ۋە ئانالىز ئېلىش
+                </button>
+            </div>
+
+            <div id="result-box" class="mt-6 hidden p-5 rounded-2xl glass-panel border border-emerald-500/30 space-y-3">
+                <div class="flex justify-between items-center text-xs font-bold text-adaptive-main">
+                    <span>ياشلىق دەۋرى (15-35 ياش) ئۆتۈش نىسبىتى:</span>
+                    <span id="percent-text" class="text-emerald-500 dark:text-emerald-400 text-sm font-black">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-3 overflow-hidden p-0.5 border">
+                    <div id="progress-bar" class="bg-gradient-to-r from-emerald-400 to-cyan-400 h-full rounded-full transition-all duration-700" style="width: 0%"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-center pt-2">
+                    <div>
+                        <div class="text-lg font-bold text-emerald-500 dark:text-emerald-400" id="days-left">0</div>
+                        <div class="text-[11px] text-adaptive-sub">قالغان كۈن (35 ياشقىچە)</div>
+                    </div>
+                    <div>
+                        <div class="text-lg font-bold text-amber-500 dark:text-amber-400" id="hours-left">0</div>
+                        <div class="text-[11px] text-adaptive-sub">قالغان ئالتۇن سائەت</div>
+                    </div>
+                </div>
+                <p id="advice-text" class="text-center text-xs text-emerald-500 dark:text-emerald-400 italic pt-2 font-semibold">
+                    "ھەر بىر سائەت—ئاللاھنىڭ سىزگە بەرگەن ھەقسىز نېمىتىدۇر."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Habit Tracker & Goals -->
+    <section id="tracker" class="py-16 px-4 max-w-5xl mx-auto">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl md:text-4xl font-black text-adaptive-main">
+                ياشلىقنى مەنىلىك قىلىش <span class="text-emerald-500 dark:text-emerald-400">ئادەت بەلگىلىگۈچىسى</span>
+            </h2>
+            <p class="text-adaptive-sub text-xs mt-1">كۈندىلىك مۇھىم ئىبادەت ۋە تەرەققىيات ئادەتلىرىڭىزنى ئىنتىزاملاشتۇرۇڭ!</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass-panel p-6 rounded-2xl space-y-4">
+                <h3 class="text-base font-bold text-emerald-500 dark:text-emerald-400 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i>
+                    كۈندىلىك مۇھىم ئادەتلەر
+                </h3>
+                <div class="space-y-2.5" id="habit-container">
+                    <!-- Dynamic Habits -->
+                </div>
+            </div>
+
+            <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+                <div>
+                    <h3 class="text-base font-bold text-amber-500 dark:text-amber-400 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye"></i>
+                        ئۆز غايىڭىزنى قوشۇڭ
+                    </h3>
+                    <p class="text-xs text-adaptive-sub mb-4">ياشلىقىڭىزدا يېتىشمەكچى بولغان مەقسەتنى كىرگۈزۈڭ.</p>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="goal-input" placeholder="مەسىلەن: 1 پارە قۇرئان يادلاش، يېڭى تىل ئۆگىنىش..." class="flex-1 px-3 py-2 rounded-xl bg-adaptive-input text-xs focus:outline-none focus:border-amber-500">
+                        <button onclick="addGoal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-all">
+                            قوشۇش
+                        </button>
+                    </div>
+
+                    <ul id="goals-list" class="space-y-2">
+                        <!-- Custom Goals -->
+                    </ul>
+                </div>
+
+                <div class="mt-6 pt-3 border-t border-slate-700/40 text-center">
+                    <span class="text-xs text-adaptive-sub">ئورۇندالغان نىسبىتى: </span>
+                    <span id="tracker-score" class="text-emerald-500 dark:text-emerald-400 font-bold">0%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Popup for 30 Figures -->
+    <div id="figure-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel bg-slate-900 dark:bg-slate-900 light:bg-white max-w-xl w-full rounded-2xl p-6 border border-emerald-500/40 relative max-h-[85vh] overflow-y-auto shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:bg-emerald-500 hover:text-white flex items-center justify-center transition-all">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div id="modal-content">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-6 border-t border-slate-800 glass-panel text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div>
+                © 2026 ياشلىق — ئەھمىيەتلىك ئۆمۈر. بارلىق ھوقۇق ساقلانغان.
+            </div>
+            <div class="flex gap-4">
+                <a href="#hero" class="hover:text-emerald-400">باش بەت</a>
+                <a href="#reminders" class="hover:text-emerald-400">ئايەت-ھەدىس</a>
+                <a href="#figures" class="hover:text-emerald-400">30 شەخس</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- 1. Quran Verses & Hadith Data ---
+        const quranAndHadith = [
+            {
+                type: "سەھىھ ھەدىس",
+                title: "ئالدىنىپ قالىدىغان ئىككى چوڭ نېئمەت",
+                source: "سەھىھ بۇخارى (6412)",
+                content: "«ئىككى زور نېئمەت باركى، نۇرغۇن كىشىلەر ئۇنىڭ قەدرىگە يەتمەي ئالدىنىپ قالىدۇ: بىرى تەن ساقلىق، يەنە بىرى بىكار ۋاقىت.»",
+                icon: "fa-scale-balanced",
+                color: "amber"
+            },
+            {
+                type: "قۇرئان ئايىتى",
+                title: "ئۆمۈر ۋە ۋاقىتنىڭ قىممىتى",
+                source: "سۇرە ئەل-ئەسر (1-3)",
+                content: "«ئەسر بىلەن قەسەمكى، ئىنسان ئەلۋەتتە زىيان ئىچىدىدۇر. پەقەت ئىمان ئېيتقان، ياخشى ئەمەللەرنى قىلغان، بىر-بىرىگە ھەقنى تەۋسىيە قىلىشقان ۋە سەبىرنى تەۋسىيە قىلىشقانلار بۇنىڭدىن مۇستەسنا.»",
+                icon: "fa-book-quran",
+                color: "emerald"
+            },
+            {
+                type: "سەھىھ ھەدىس",
+                title: "5 نەرسىدىن بۇرۇن 5 نەرسىنى غەنىيمەت بىلىش",
+                source: "سۇنەن كۇبرا نەسائىي / ھاكىم (306)",
+                content: "«بەش نەرسىدىن بۇرۇن بەش نەرسىنى غەنىيمەت بىلىڭ: قارىيىشتىن بۇرۇن ياشلىقىڭىزنى، كېسەللىكتىن بۇرۇن ساغلاملىقىڭىزنى، كەمبەغەللىكتىن بۇرۇن بايلىقىڭىزنى، ئالدىراشلىقتىن بۇرۇن بىكار ۋاقىتنى، ئۆلۈمدىن بۇرۇن ھاياتىڭىزنى.»",
+                icon: "fa-hand-holding-heart",
+                color: "cyan"
+            },
+            {
+                type: "سەھىھ ھەدىس",
+                title: "قىيامەتتە ياشلىقتىن سورىلىدىغان سوئال",
+                source: "سۇنەن تىرمىزى (2417)",
+                content: "«بەندىنىڭ قەدىمى قىيامەت كۈنى تۆت نەرسىدىن سورالمىغۇچە ئورنىدىن تەبرىمەيدۇ: ئۆمرىنى نېمىگە سەرپ قىلدى؟ ياشلىقىنى قانداق ئۆتكۈزدى؟ مىلىنى قەيەردىن تېپىپ قەيەرگە ئىشلەتتى؟ بىلىمىگە قانداق ئامال قىلدى؟»",
+                icon: "fa-hourglass-half",
+                color: "purple"
+            },
+            {
+                type: "سەھىھ ھەدىس",
+                title: "ئەرش سايىسىدىكى ياشلار",
+                source: "سەھىھ بۇخارى (660) / سەھىھ مۇسلىم (1031)",
+                content: "«ھېچقانداق سایە بولمىغان قىيامەت كۈنى ئاللاھ ئۆز ئەرشىنىڭ سايىسىدا سايلىتىدىغان يەتتە تۈرلۈك كىشىنىڭ بىرى: ئاللاھقا ئىبادەت قىلىش بىلەن ئۆسۈپ يېتىلگەن ياشتۇر.»",
+                icon: "fa-sun",
+                color: "amber"
+            },
+            {
+                type: "قۇرئان ئايىتى",
+                title: "ياشلارنىڭ ئىمانىدىكى شىجائەت",
+                source: "سۇرە ئەل-كەھف (13)",
+                content: "«بىز ساڭا ئۇلارنىڭ خەبىرىنى ھەققىي يەتكۈزۈپ بېرىمىز: ئۇلار رەببىگە ئىمان ئېيتقان ياشلار ئىدى، بىز ئۇلارنىڭ ھىدايىتىنى تېخىمۇ زىيادە قىلدۇق.»",
+                icon: "fa-shield-halved",
+                color: "emerald"
+            }
+        ];
+
+        // --- 2. Complete Data for 30 Prominent Islamic Figures ---
+        const figures = [
+            { id: 1, name: "ئۇسامە ئىبنى زەيد", title: "18 يېشىدا ئىسلام قوشۇنىنىڭ باش سەرپەرمەندى", age: "18 ياش", cat: "leader", icon: "fa-shield-cat", bio: "18 يېشىدا ئەڭ چوڭ رۇم (بىزانت) ئارمىيەسىگە قارشى ئىسلام قوشۇنىغا باش سەرپەرمەند قىلىپ تەيىنلەنگەن. ئۇنىڭ قوشۇنىدا ئابۇ بەكرى ۋە ئۆمەر رەزىيەللاھۇ ئەنھۇلار بار ئىدى.", lesson: "ياشلىقنى ياشنى باھانە قىلماي ئېغىر مەسئۇلىيەتنى زىممىگە ئېلىشنىڭ كۆرۈنەرلىك ئۈلگىسى." },
+            { id: 2, name: "مۇسئاب ئىبنى ئۇمەير", title: "ئىسلامنىڭ تۇنجى ئەلچىسى", age: "24 ياش", cat: "sahaba", icon: "fa-paper-plane", bio: "مەككىدىكى ئەڭ باي، ئەڭ كۆركەم ياش ئىدى. ئىسلامنى قوبۇل قىلغاندىن كېيىن بارلىق مال-دۇنيادىن كەچتى. مەدىنىگە تۇنجى ئىسلام ئۆگەتكۈچىسى بولۇپ بېرىپ، مەدىنىنى ئىسلام شەھىرىگە ئايلاندۇرغان.", lesson: "ھاياتنىڭ ھەقىقىي زىننىتى مال-دۇنيا ئەمەس، ئاللاھنىڭ دىنىغا خىزمەت قىلىشتۇر." },
+            { id: 3, name: "ئەلى ئىبنى ئەبى تالىپ", title: "تۇنجى ياش مۇسۇلمان ۋە باتۇر", age: "10 ياش", cat: "sahaba", icon: "fa-sword", bio: "10 يېشىدا تۇنجى بولۇپ ئىسلامنى قوبۇل قىلغان ياش. ھىجرەت كېچىسى پەيغەمبەر ئۈچۈن جېنىنى ئالقانغا قويۇپ، پەيغەمبەرنىڭ ئورنىدا ياتقان.", lesson: "جۇرئەت، ئىماندا چىڭ تۇرۇش ۋە قورقماسلىق." },
+            { id: 4, name: "زەيد ئىبنى سابىت", title: "قۇرئان توپلىغۇچى ۋە كۆپ تىللىق ياش", age: "13 ياش", cat: "scholar", icon: "fa-book-bookmark", bio: "13 يېشىدا قۇرئان يادلاپ بولغان. پەيغەمبەرنىڭ بۇيرۇقى بىلەن ئىبرانىي ۋە سۇريانى تىللىرىنى 15 كۈندە ئۆگىنىپ بولغان. كېيىن قۇرئاننى بىر يەرگە توپلاشقا مەسئۇل بولغان.", lesson: "زېھىننى تىل ئۆگىنىش ۋە ئىلمىي تەتقىقاتقا ئىشلىتىش." },
+            { id: 5, name: "ئىبنى ئابباس", title: "ئۈممەتنىڭ بۈيۈك تەپسىرشۇناسى", age: "13 ياش", cat: "scholar", icon: "fa-brain", bio: "پەيغەمبەر ئەلەيھىسسالام ئۇنىڭ ئۈچۈن دۇئا قىلغان. ئۆمەر رەزىيەللاھۇ ئەنھۇ ئۇنى بەدىر قەھرىمانلىرى بولغان كۆرۈنەرلىك ساھابىلەر قاتارىدا تۇرغۇزۇپ مەسلىھەت ئالاتتى.", lesson: "كىچىك يېشىدىن باشلاپ بىلىمگە تەرنا بولۇش." },
+            { id: 6, name: "مۇھەممەد ئەل-فاتىھ", title: "قۇسطەنتىنىيەنى پەتھى قىلغۇچى", age: "21 ياش", cat: "leader", icon: "fa-chess-king", bio: "21 يېشىدا مىڭ يىللاپ تەسلىم بولمىغان بىزانت ئىمپېرىيەسىنىڭ پايتەختى قۇسطەنتىنىيەنى پەتھى قىلىپ، پەيغەمبەرنىڭ بېشارتىگە ئېرىشكەن.", lesson: "چوڭ غايە تىكلەش ۋە زامانىۋى تېخنىكا بىلەن ئىماننى بىرلەشتۈرۈش." },
+            { id: 7, name: "مۇئاز ئىبنى جەبەل", title: "ھالال ۋە ھەرامنى ئالىمى", age: "18 ياش", cat: "sahaba", icon: "fa-balance-scale", bio: "18 يېشىدا مۇسۇلمان بولغان. پەيغەمبەر ئەلەيھىسسالام ئۇنى يەمەنگە قازى ۋە ئىسلام ئۆگەتكۈچى قىلىپ ئەۋەتكەن.", lesson: "شەرىئەت بىلىملىرىنى چوڭقۇر ئىگىلەپ، باشقىلارغا گۈزەل تەلىم بېرىش." },
+            { id: 8, name: "سەئد ئىبنى ئەبى ۋەقپاس", title: "ئىسلامدا تۇنجى ئوق ئاتقان باتۇر", age: "17 ياش", cat: "sahaba", icon: "fa-bullseye", bio: "17 يېشىدا مۇسۇلمان بولغان. ئانىسى ئاچلىق ئېلان قىلىپ ئىمانىدىن ياندۇرماقچى بولغاندا «مىڭ جېنىڭ بولسىمۇ ئىمانىمدىن يانمايمەن» دېگەن.", lesson: "ھەق ئېتىقادتا ئاقىلانە شەكىلدە چىڭ تۇرۇش." },
+            { id: 9, name: "زۇبەير ئىبنى ئەۋۋام", title: "پەيغەمبەرنىڭ ھەۋارىيسى", age: "15 ياش", cat: "sahaba", icon: "fa-shield", bio: "15 يېشىدا ئىسلامغا كىرگەن. مەككىدە پەيغەمبەرگە زىيان يەتتى دەپ ئاڭلاپ تۇنجى بولۇپ قىلىچ قىنادىن چىقارغان ياش.", lesson: "ھەق دىنغا ساداقەتمەن بولۇش." },
+            { id: 10, name: "ئائىشە بىنت ئەبى بەكرى", title: "ئۈممەتنىڭ ئالىمە ئانىسى", age: "ياشلىق دەۋرى", cat: "scholar", icon: "fa-hands-praying", bio: "پەيغەمبەر ئەلەيھىسسالامدىن 2200 دىن ئارتۇق ھەدىس رىۋايەت قىلغان. ئىسلام فىقھى، شەئرىيەت ۋە تىبابەتتە تەڭداشسىز ئالىمە.", lesson: "ئايال-قىزلارنىڭ بىلىم ئېلىپ جەمئىيەتكە نەپ يەتكۈزۈشى." },
+            { id: 11, name: "تارىق ئىبنى زىياد", title: "ئەندەلۇسنى پەتھى قىلغۇچى", age: "ياشلىق دەۋرى", cat: "leader", icon: "fa-ship", bio: "ياشلىقىدا ياۋروپا قىتئەسىگە ئۆتۈپ ئىسپانىيەنى پەتھى قىلغان ۋە ياۋروپادا 800 يىللىق ئىسلام مەدەنىيىتىنىڭ ئاساسىنى سالغان.", lesson: "ئارقىغا يانىدىغان يول قالدۇرماي، نىشان ئۈچۈن ئىلگىرىلەش." },
+            { id: 12, name: "مۇھەممەد ئىبنى قاسىم", title: "سىند (ھىندىستان)نى پەتھى قىلغۇچى", age: "17 ياش", cat: "leader", icon: "fa-flag", bio: "17 يېشىدا زور ئىسلام قوشۇنىغا رەھبەرلىك قىلىپ، ھىندىستان يېرىم ئارىلىغا ئىسلام نۇرىنى ئېلىپ كىرگەن.", lesson: "ياشلىقتىكى غايە-ئېتىقاد بىلەن دەۋرنى تەۋرىتىش." },
+            { id: 13, name: "ئىمام شافىئىي", title: "شافىئىي مەزھىپىنىڭ ئاساسچىسى", age: "15 ياش", cat: "scholar", icon: "fa-pen-nib", bio: "7 يېشىدا قۇرئان يادلىغان، 10 يېشىدا «مۇۋەتتا»نى ياد ئالغان. 15 يېشىدا مۇپتىلىق پەتىۋا بېرىش سالاھىيىتىگە ئېرىشكەن.", lesson: "ئىلمىي مانېۋىر كىچىك ياشتىن باشلىنىدۇ." },
+            { id: 14, name: "ئىمام نەۋەۋىي", title: "«رىيازۇس سالىھىن» مۇئەللىپى", age: "ياشلىق دەۋرى", cat: "scholar", icon: "fa-book-open", bio: "ئۆمرى قىسقا بولسىمۇ، ياشلىقىدىن كېچە-كۈندۈز يېزىپ ئۈممەت ئۈچۈن قىيامەتكە قەدەر ئۆچمەيدىغان كىتابلارنى قالدۇرغان.", lesson: "ۋاقىتنى زەررىچىمۇ ئىسراپ قىلماي ئۆگىنىش." },
+            { id: 15, name: "تەلھە ئىبنى ئۇبەيدۇللاھ", title: "ئۇھۇد غەزاتىدىكى تىرىك شەھىد", age: "16 ياش", cat: "sahaba", icon: "fa-person-military-rifle", bio: "16 يېشىدا ئىسلامغا كىرگەن. ئۇھۇد ئۇرۇشىدا پەيغەمبەرنى ئۆز بەدىنى بىلەن توسىۋېلىپ 30 دىن ئارتۇق زەخىم ئالغان.", lesson: "ئاللاھ ئۈچۈن جان كۆيدۈرۈش ۋە شىجائەت." },
+            { id: 16, name: "خباب ئىبنى ئەرەت", title: "ئېغىر ئازابتا سەبىر قىلغان ياش", age: "ياشلىق دەۋرى", cat: "sahaba", icon: "fa-fire", bio: "مەككىدە كاپىرلار ئۇنىڭ يالىڭاچ قورساقلىرىغا چوغ قويسىمۇ، ئىمانىدىن بىر زەررە ئارقىغا يانمىغان سەبىرلىك ياش.", lesson: "قىيىنچىلىق ۋە ئىمتىھانلاردا ئىمانىنى ساقلاش." },
+            { id: 17, name: "ئەبۇ ئۇبەيدە ئىبنى ئەل-جەرراھ", title: "ئۈممەتنىڭ ئامىنى", age: "ياشلىق دەۋرى", cat: "sahaba", icon: "fa-handshake", bio: "تۇنجى مۇسۇلمان بولغان ياشلاردىن بىرى. كېيىن شام زىمىنىنى پەتھى قىلىشقا مەسئۇل بولغان بۈيۈك سەرپەرمەند.", lesson: "ئامانەتدارلىق، ئادالەت ۋە كەمتەرلىك." },
+            { id: 18, name: "جەئفەر ئىبنى ئەبى تالىپ", title: "ھەبەشسىتان دەئۋەتچىسى", age: "25 ياش", cat: "sahaba", icon: "fa-feather-pointed", bio: "ھەبەشسىتان پادىشاھى نەجاشىنىڭ ئالدىدا ئىسلامنى ئىنتايىن گۈزەل شەرھىلەپ نەجاشىنى ئىسلامغا ئېرىشتۈرگەن.", lesson: "ئاقىلانە سۆزلەش ۋە دەئۋەت تالانتى." },
+            { id: 19, name: "سۇلتان سالاھىددىن ئەييوپى", title: "قۇددۇسنى پەتھى قىلغۇچى سۇلتان", age: "ياشلىق دەۋرى", cat: "leader", icon: "fa-gem", bio: "ياشلىقىدىن باشلاپ ئىنتىزام، قۇرئان ۋە ھەربىي بىلىملەر بىلەن ئۆسۈپ، كرېست ئارمىيەسىنى يېڭىپ قۇددۇسنى ئەركىنلىككە چىقارغان.", lesson: "ئاخلاق بىلەن كۈچ-قۋۋەتنى بىرلەشتۈرۈش." },
+            { id: 20, name: "ئىمام بۇخارى", title: "ھەدىس پادىشاھى", age: "18 ياش", cat: "scholar", icon: "fa-scroll", bio: "ياشلىقىدا يۈز مىڭلىغان سەھىھ ھەدىسلەرنى يادلىغان ۋە 18 يېشىدا ساھابىلەرنىڭ تارىخى ھەققىدە كىتاب يازغان.", lesson: "ئىلمىي ئىستىدات ۋە قەيسەرلىك." },
+            { id: 21, name: "ئاسما بىنت ئەبى بەكرى", title: "ئىككى بەلباغ ئىگىسى", age: "27 ياش", cat: "sahaba", icon: "fa-bag-shopping", bio: "پەيغەمبەر ئەلەيھىسسالام ۋە ئاتىسى ھىجرەت قىلغاندا سۇر غارىغا كېچىدە يېمەكلىك يەتكۈزۈپ بېرىپ زور شىجائەت كۆرسەتكەن.", lesson: "قورقماس قەھرىمانلىق." },
+            { id: 22, name: "ئابدىراخمان ئىبنى ئاۋپ", title: "سەمىمىي تىجارەتچى", age: "30 ياشقىچە", cat: "sahaba", icon: "fa-coins", bio: "ئىسلام ئۈچۈن مال-دۇنياسىنى كۆپلەپ سەپەربەر قىلغان، ھالال تىجارەتنىڭ ئۈلگىسى بولغان باشلامچى.", lesson: "ئىقتىسادىي ئۆزلۈكىنى تىكلەش ۋە سەخاۋەت." },
+            { id: 23, name: "ئارقام ئىبنى ئەبى ئارقام", title: "ئىسلام تۇنجى مەكتىپىنىڭ ئىگىسى", age: "16 ياش", cat: "sahaba", icon: "fa-house-chimney", bio: "16 يېشىدا ئۆيىنى پەيغەمبەر ۋە ساھابىلەرنىڭ مەخپىي جەم بولۇپ قۇرئان ئۆگىنىدىغان تۇنجى مەكتىپى قىلىپ بەرگەن.", lesson: "ئۆز ئۆيى ۋە پۇرسىتىنى ئىسلامغا ئاتاش." },
+            { id: 24, name: "ئابدۇللاھ ئىبنى ئۆمەر", title: "سۈننەتكە ئىنچىكە ئەگەشكۈچى", age: "13 ياش", cat: "sahaba", icon: "fa-shoe-prints", bio: "ياشلىقىدىن پەيغەمبەر ئەلەيھىسسالامنىڭ كۈندىلىك ھەر بىر ئادىتىگە ئىنچىكە ئەگەشكەن بۈيۈك ساھابە.", lesson: "سۈننەتكە ئېتىقاد بىلەن ئەگىشىش." },
+            { id: 25, name: "ئال-خۇوارىزجىمىي", title: "ئالگېبرا ئىلمىنىڭ ئاساسچىسى", age: "ياشلىق دەۋرى", cat: "scholar", icon: "fa-calculator", bio: "ياشلىقىدا ماتېماتىكىدا بۆسۈش قىلىپ، زامانىۋى كودلاش ۋە ئالگورىزىمنىڭ ئاساسىنى سالغان.", lesson: "پەن-تېخنىكىدا دۇنياغا ئۈلگە بولۇش." },
+            { id: 26, name: "ئىبنى سىنا", title: "دۇنيا تىبابىتىنىڭ ئاتاسى", age: "18 ياش", cat: "scholar", icon: "fa-notes-medical", bio: "18 يېشىدا دۇنيادىكى بارلىق تىبابەت بىلىملىرىنى ئىگىلەپ بولغان ۋە «ئەل-قانون» كىتابىنى يازغان.", lesson: "تىبابەت ۋە پەن تەتقىقاتتا تىرىشچانلىق." },
+            { id: 27, name: "قۇتەيبە ئىبنى مۇسلىم", title: "ئوتتۇرا ئاسىيانى پەتھى قىلغۇچى", age: "ياشلىق دەۋرى", cat: "leader", icon: "fa-horse", bio: "ئوتتۇرا ئاسىيا زىمىنلىرىغا ئىسلام نۇرىنى يەتكۈزۈشتە بۈيۈك تۆھپە قوشقان سەرپەرمەند.", lesson: "مۇساپىلەرنى بېسىپ نۇر يەتكۈزۈش." },
+            { id: 28, name: "مۇئاۋىيە ئىبنى ئەبى سۇفيان", title: "ۋەھىي يازغۇچى ياش", age: "ياشلىق دەۋرى", cat: "sahaba", icon: "fa-pen-fancy", bio: "ياشلىقىدا قۇرئان ئايەتلىرىنى يېزىشقا مەسئۇل بولغان، كېيىن تۇنجى ئىسلام دېڭىز ئارمىيەسىنى قۇرغان.", lesson: "ئۈممەت ئۈچۈن يېڭى تېخنىكا يارىتىش." },
+            { id: 29, name: "ئىمام ئەھمەد ئىبنى ھەنبەل", title: "سۈننەتنىڭ قوغدىغۇچىسى", age: "ياشلىق دەۋرى", cat: "scholar", icon: "fa-book-atlas", bio: "مىڭلىغان ياقا يۇرتلارغا پىيادە مېڭىپ ھەدىس توپلىغان ۋە ئېغىر پىتنەلەردە سەبىر قىلغان.", lesson: "ھەق ئۈچۈن سەبىر قىلىش ۋە قورقماسلىق." },
+            { id: 30, name: "ئەنەس ئىبنى مالىك", title: "پەيغەمبەرنىڭ 10 يىللىق خىزمەتچىسى", age: "10 ياش", cat: "sahaba", icon: "fa-hand-holding-heart", bio: "10 يېشىدىن باشلاپ پەيغەمبەرنىڭ يېنىدا بولۇپ، ئىسلامنىڭ ئەڭ گۈزەل ئاخلاق ۋە ھەدىسلىرىنى ئۆگەنگەن.", lesson: "ئاخلاق ۋە ئۇستازغا ھۆرمەت قىلىش." }
+        ];
+
+        // --- 3. Habit Tracker Data ---
+        const defaultHabits = [
+            { id: 1, text: 'بامدات ۋە باشقا 5 ۋاق نەمەزنى ئۆز ۋاقتىدا ئۆتەش', done: false },
+            { id: 2, text: 'كۈندە كەم دەگەندە 1 بەت قۇرئان ئوقۇش ياكى تەپسىر كۆرۈش', done: false },
+            { id: 3, text: 'كەم دەگەندە 30 مىنۇت بېدىن چېنىقتۇرۇش', done: false },
+            { id: 4, text: 'يېڭى بىر ئىقتىدار (تېخنىكا، تىل ياكى مەشھۇر كىتاب) ئۆگىنىش', done: false },
+            { id: 5, text: 'ئىجتىمائىي ئالاقە تورىدىكى بىكارچىلىقنى 1 سائەتتىن ئاشۇرماسلىق', done: false }
+        ];
+
+        let customGoals = [];
+
+        // --- Render Quran & Hadith Cards ---
+        function renderReminders() {
+            const container = document.getElementById('reminder-cards-container');
+            container.innerHTML = '';
+
+            quranAndHadith.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "glass-panel p-5 rounded-2xl border space-y-3 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] px-2.5 py-0.5 rounded-full bg-${item.color}-500/20 text-${item.color}-500 dark:text-${item.color}-400 font-bold border border-${item.color}-500/30">
+                                ${item.type}
+                            </span>
+                            <i class="fa-solid ${item.icon} text-${item.color}-500 dark:text-${item.color}-400 text-base"></i>
+                        </div>
+                        <h4 class="text-base font-bold text-adaptive-main mb-1.5">${item.title}</h4>
+                        <p class="text-xs text-adaptive-sub leading-relaxed italic mb-3">${item.content}</p>
+                    </div>
+                    <div class="text-[11px] font-semibold text-${item.color}-500 dark:text-${item.color}-400 pt-2 border-t border-slate-700/40 flex justify-between items-center">
+                        <span>— ${item.source}</span>
+                        <button onclick="copyText('${item.content.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-emerald-500 transition-colors" title="كۆچۈرۈش">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- Random Quote Generator ---
+        function generateRandomReminder() {
+            const randomIndex = Math.floor(Math.random() * quranAndHadith.length);
+            const item = quranAndHadith[randomIndex];
+            document.getElementById('random-title').innerText = `${item.type} — ${item.title}`;
+            document.getElementById('random-content').innerText = item.content;
+            document.getElementById('random-source').innerText = `— ${item.source}`;
+        }
+
+        // --- Render 30 Figures Grid ---
+        function renderFigures(filter = 'all', searchText = '') {
+            const grid = document.getElementById('figures-grid');
+            grid.innerHTML = '';
+
+            const filtered = figures.filter(fig => {
+                const matchesCat = (filter === 'all' || fig.cat === filter);
+                const matchesSearch = fig.name.toLowerCase().includes(searchText.toLowerCase()) || 
+                                      fig.title.toLowerCase().includes(searchText.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center text-adaptive-sub py-6 text-xs">ھېچقانداق كىشى تېپىلمىدى.</div>`;
+                return;
+            }
+
+            filtered.forEach(fig => {
+                const card = document.createElement('div');
+                card.className = "glass-panel p-4 rounded-xl border transition-all cursor-pointer flex flex-col justify-between group hover:border-emerald-500/50";
+                card.onclick = () => openModal(fig.id);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                                <i class="fa-solid ${fig.icon}"></i>
+                            </div>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-500/30">
+                                ${fig.age}
+                            </span>
+                        </div>
+                        <h4 class="text-sm font-bold text-adaptive-main mb-1 group-hover:text-emerald-500 transition-colors">${fig.name}</h4>
+                        <p class="text-[11px] text-amber-500 dark:text-amber-400 font-semibold mb-1 line-clamp-1">${fig.title}</p>
+                        <p class="text-xs text-adaptive-sub leading-relaxed line-clamp-2 mb-2">${fig.bio}</p>
+                    </div>
+                    <div class="text-[11px] font-bold text-emerald-500 dark:text-emerald-400 flex items-center gap-1 pt-2 border-t border-slate-700/30">
+                        <span>تەرجىمىھالىنى كۆرۈش</span>
+                        <i class="fa-solid fa-arrow-left text-[9px]"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- Filter Figures ---
+        function filterFigures(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white');
+                btn.classList.add('glass-panel');
+            });
+            event.target.classList.add('bg-emerald-600', 'text-white');
+            event.target.classList.remove('glass-panel');
+
+            const searchText = document.getElementById('search-figures').value;
+            renderFigures(category, searchText);
+        }
+
+        function searchFigures() {
+            const searchText = document.getElementById('search-figures').value;
+            renderFigures('all', searchText);
+        }
+
+        // --- Modal Box Functions ---
+        function openModal(id) {
+            const fig = figures.find(f => f.id === id);
+            if (!fig) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-500 dark:text-amber-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid ${fig.icon}"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-black text-adaptive-main">${fig.name}</h3>
+                        <span class="text-xs font-bold text-amber-500 dark:text-amber-400">${fig.title} (${fig.age})</span>
+                    </div>
+                </div>
+                <div class="space-y-3 text-xs text-adaptive-sub leading-relaxed">
+                    <div>
+                        <h4 class="font-bold text-emerald-500 dark:text-emerald-400 mb-1">تەرجىمىھالى ۋە ئىش-ئىزلىرى:</h4>
+                        <p class="p-3 rounded-xl glass-panel border border-slate-700/40 text-adaptive-main">${fig.bio}</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                        <h4 class="font-bold text-emerald-500 dark:text-emerald-400 mb-1">ياشلار ئۈچۈن ئالتۇن ساپاق:</h4>
+                        <p class="text-adaptive-main font-semibold">${fig.lesson}</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('figure-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('figure-modal').classList.add('hidden');
+        }
+
+        // --- Theme Toggle ---
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                document.body.classList.remove('bg-cyber-darkBg', 'text-slate-100');
+                document.body.classList.add('bg-slate-50', 'text-slate-900');
+                themeIcon.className = 'fa-solid fa-moon text-base text-indigo-600';
+                themeText.innerText = 'كېچىلىك';
+            } else {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                document.body.classList.remove('bg-slate-50', 'text-slate-900');
+                document.body.classList.add('bg-cyber-darkBg', 'text-slate-100');
+                themeIcon.className = 'fa-solid fa-sun text-base text-amber-400';
+                themeText.innerText = 'كۈندۈزلىك';
+            }
+        }
+
+        // --- Youth Time Calculator ---
+        function calculateYouth() {
+            const ageInput = document.getElementById('user-age').value;
+            let age = parseInt(ageInput);
+            if (isNaN(age) || age < 1) age = 20;
+
+            const startAge = 15;
+            const endAge = 35;
+            const totalYouthYears = endAge - startAge;
+
+            let percentage = 0;
+            if (age <= startAge) percentage = 0;
+            else if (age >= endAge) percentage = 100;
+            else percentage = Math.round(((age - startAge) / totalYouthYears) * 100);
+
+            const yearsLeft = Math.max(0, endAge - age);
+            const daysLeft = yearsLeft * 365;
+            const hoursLeft = daysLeft * 24;
+
+            document.getElementById('result-box').classList.remove('hidden');
+            document.getElementById('percent-text').innerText = `${percentage}%`;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('days-left').innerText = daysLeft.toLocaleString();
+            document.getElementById('hours-left').innerText = hoursLeft.toLocaleString();
+
+            const adviceText = document.getElementById('advice-text');
+            if (percentage < 30) {
+                adviceText.innerText = '"ياشلىقىڭىزنىڭ دەسلەپكى ئالتۇن دەۋرىدىسىز! ئىبادەت ۋە بىلىم بىلەن پۇختا ئاساس سېلىڭ."';
+            } else if (percentage < 70) {
+                adviceText.innerText = '"ياشلىق يېرىمىدىن ئاشتى، نىشانلىرىڭىزنى تېزلىتىپ مۇھىم نەتىجە چىقىرىدىغان ۋاقىت كەلدى!"';
+            } else {
+                adviceText.innerText = '"ۋاقىت ئىنتايىن غەنىيمەت! تەجرىبىلىرىڭىزنى مۇستەھكەملەپ، ھەر بىر كۈندىن ئۈنۈم ئېلىڭ."';
+            }
+        }
+
+        // --- Habit Tracker Functions ---
+        function renderHabits() {
+            const container = document.getElementById('habit-container');
+            container.innerHTML = '';
+            let completedCount = 0;
+
+            defaultHabits.forEach(habit => {
+                if (habit.done) completedCount++;
+
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer ${
+                    habit.done 
+                    ? 'bg-emerald-500/10 border-emerald-500/60 text-adaptive-main' 
+                    : 'glass-panel border-slate-700/40 text-adaptive-sub hover:border-emerald-500/40'
+                }`;
+                div.onclick = () => toggleHabit(habit.id);
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-4 h-4 rounded border flex items-center justify-center ${
+                            habit.done ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-400'
+                        }">
+                            ${habit.done ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+                        </div>
+                        <span class="text-xs ${habit.done ? 'line-through text-slate-400' : ''}">${habit.text}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            const total = defaultHabits.length + customGoals.length;
+            const customCompleted = customGoals.filter(g => g.done).length;
+            const scorePercent = total > 0 ? Math.round(((completedCount + customCompleted) / total) * 100) : 0;
+            document.getElementById('tracker-score').innerText = `${scorePercent}%`;
+        }
+
+        function toggleHabit(id) {
+            const habit = defaultHabits.find(h => h.id === id);
+            if (habit) {
+                habit.done = !habit.done;
+                renderHabits();
+            }
+        }
+
+        function addGoal() {
+            const input = document.getElementById('goal-input');
+            const value = input.value.trim();
+            if (value !== '') {
+                customGoals.push({ id: Date.now(), text: value, done: false });
+                input.value = '';
+                renderGoals();
+                renderHabits();
+            }
+        }
+
+        function toggleGoal(id) {
+            const goal = customGoals.find(g => g.id === id);
+            if (goal) {
+                goal.done = !goal.done;
+                renderGoals();
+                renderHabits();
+            }
+        }
+
+        function renderGoals() {
+            const list = document.getElementById('goals-list');
+            list.innerHTML = '';
+
+            customGoals.forEach(goal => {
+                const li = document.createElement('li');
+                li.className = `flex items-center justify-between p-2 rounded-xl border text-xs cursor-pointer ${
+                    goal.done ? 'bg-amber-500/10 border-amber-500/60' : 'glass-panel border-slate-700/40'
+                }`;
+                li.onclick = () => toggleGoal(goal.id);
+                li.innerHTML = `
+                    <span class="${goal.done ? 'line-through text-slate-400' : 'text-adaptive-main'}">${goal.text}</span>
+                    <i class="fa-solid ${goal.done ? 'fa-circle-check text-amber-500' : 'fa-circle text-slate-400'}"></i>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert('ئايەت/ھەدىس كۆچۈرۈلدى!');
+        }
+
+        // --- Animated Canvas ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const particles = [];
+        for (let i = 0; i < 35; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 0.5,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                color: ['#10b981', '#06b6d4', '#f59e0b', '#8b5cf6'][Math.floor(Math.random() * 4)]
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.3;
+                ctx.fill();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = function() {
+            renderReminders();
+            renderFigures();
+            renderHabits();
+            calculateYouth();
+            animateParticles();
+        };
+    </script>
+</body>
+</html>
